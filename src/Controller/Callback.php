@@ -23,8 +23,11 @@ final class Callback
             return new Response("The document signature ended with an unexpected $status status.");
         }
 
-        $eventDispatcher->dispatch(new DocumentSignatureCompleted($request->get('envelopeId')));
+        $response = new Response('Congratulation! Document signed.');
+        $event = new DocumentSignatureCompleted($request->get('envelopeId'), $response);
 
-        return new Response('Congratulation! Document signed.');
+        $eventDispatcher->dispatch($event);
+
+        return $event->getResponse();
     }
 }

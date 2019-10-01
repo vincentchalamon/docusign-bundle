@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace DocusignBundle\Controller;
 
 use DocusignBundle\EnvelopeBuilder;
+use DocusignBundle\Exception\MissingMandatoryParameterHttpException;
 use DocusignBundle\Utils\SignatureExtractor;
 use League\Flysystem\FileNotFoundException;
 use Psr\Log\LoggerInterface;
@@ -22,8 +23,8 @@ final class Sign
 {
     public function __invoke(EnvelopeBuilder $envelopeBuilder, SignatureExtractor $signatureExtractor, Request $request, LoggerInterface $logger): Response
     {
-        if (null === $path = $request->get('path')) {
-            throw new MissingMandatoryParametersException('You must define a `path` query parameter.');
+        if (null === $path = $request->query->get('path')) {
+            throw new MissingMandatoryParameterHttpException('You must define a `path` query parameter.');
         }
 
         try {
